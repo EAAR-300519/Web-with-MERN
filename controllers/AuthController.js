@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/UserModel");
+const jwt = require("../utils/jwt");
 
 async function register(req, res) {
   try {
@@ -32,6 +33,38 @@ async function register(req, res) {
   }
 }
 
+async function login(req, res) {
+  try {
+    const { email, password } = req.body;
+
+    if (!email) res.status(400).json({ msg: "El email es obligatorio" });
+    if (!password)
+      res.status(400).json({ msg: "La contraseña es obligatoria" });
+
+    const emailLowerCase = email.toLowerCase();
+
+    const userStorage = await User.findOne({ email: emailLowerCase });
+
+    bcrypt.compare(password, userStorage.password, (bcryptError, check) => {
+      if (bcryptError) {
+        res.status(500).json({ msg: "La contraseña no coincide" });
+      } else if (!check) {
+        res.status(400).json({ msg: "La contraseña es incorrecta" });
+      } else if (!userStorage.active) {
+        res.status(401).json({ msg: "Usuario no autorizado" });
+      } else {
+        res.status(200).json({
+          access: jwt.createAccesToken(userStorage),
+          refresh: jwt.createRefreshToken(userStorage),
+        });
+      }
+    });
+  } catch (error) {
+    res.status(400).json({ msg: "Error en el servidor: ", error });
+  }
+}
+
 module.exports = {
   register,
+  login,
 };
