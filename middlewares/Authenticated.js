@@ -1,9 +1,6 @@
 const jwt = require("../utils/jwt");
 
 function asureAuth(req, res, next) {
-  console.log("ESTAMOS EN EL ASURE AUTH");
-  console.log(req.headers.authorization);
-
   const token = req.headers.authorization;
 
   if (!token) {
@@ -16,7 +13,6 @@ function asureAuth(req, res, next) {
 
   try {
     const payload = jwt.decoded(tokenNoBearer);
-    console.log(payload);
     const { exp } = payload;
     const currentDate = new Date().getTime();
 
