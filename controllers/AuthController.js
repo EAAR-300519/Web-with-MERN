@@ -64,7 +64,27 @@ async function login(req, res) {
   }
 }
 
+async function refreshAccessToken(req, res) {
+  try {
+    const { token } = req.body;
+    const { user_id } = jwt.decoded(token);
+
+    if (!token) res.status(404).json({ msg: "El token es requerido" });
+
+    const userStorage = await User.findOne({ _id: user_id });
+
+    res.status(200).json({
+      access: jwt.createAccesToken(userStorage),
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error al hacer refresh en el token: " + error });
+  }
+}
+
 module.exports = {
   register,
   login,
+  refreshAccessToken,
 };
