@@ -1,4 +1,5 @@
 const UserModel = require("../models/UserModel");
+const image = require("../utils/image");
 const bcrypt = require("bcryptjs");
 
 async function getMe(req, res) {
@@ -45,12 +46,10 @@ async function createUser(req, res) {
     });
 
     if (req.files.avatar) {
-      //TODO:
-      console.log("PROCESAR AVATAR");
+      const imagePath = image.getFilePath(req.files.avatar);
+      console.log("IMAGEN PATH", imagePath);
+      user.avatar = imagePath;
     }
-
-    console.log(user);
-    console.log(req.files);
 
     const userStorage = await user.save();
     res.status(201).json(userStorage);
