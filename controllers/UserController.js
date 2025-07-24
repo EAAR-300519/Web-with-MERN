@@ -86,9 +86,21 @@ async function updateUser(req, res) {
   }
 }
 
+async function deleteUser(req, res) {
+  try {
+    const { id } = req.params;
+
+    await UserModel.findByIdAndDelete({ _id: id });
+    res.status(200).json({ msg: "Usuario eliminado correctamente!" });
+  } catch (error) {
+    res.status(400).json({ msg: "Error al tratar de eliminar el usuario" });
+  }
+}
+
 module.exports = {
   getMe,
   getUsers,
   createUser,
   updateUser,
+  deleteUser,
 };
