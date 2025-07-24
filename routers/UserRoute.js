@@ -9,9 +9,14 @@ const api = express.Router();
 api.get("/user/me", [md_auth.asureAuth], UserController.getMe);
 api.get("/users", [md_auth.asureAuth], UserController.getUsers);
 api.post(
-  "/createUser",
+  "/user",
   [md_auth.asureAuth, md_multiparty],
   UserController.createUser
+);
+api.patch(
+  "/user/:id",
+  [md_auth.asureAuth, md_multiparty],
+  UserController.updateUser
 );
 
 module.exports = api;

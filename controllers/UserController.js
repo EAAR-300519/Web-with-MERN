@@ -58,8 +58,37 @@ async function createUser(req, res) {
   }
 }
 
+async function updateUser(req, res) {
+  try {
+    const { id } = req.params;
+    const userData = req.body;
+
+    //Password
+    if (userData.password) {
+      const salt = bcrypt.genSaltSync(10);
+      const hasPassword = bcrypt.hashSync(userData.password, salt);
+
+      userData.password = hasPassword;
+    } else {
+      delete userData.password;
+    }
+
+    //Avatar
+    if (req.files.avatar) {
+      const imagePath = image.getFilePath(req.files.avatar);
+      userData.avatar = imagePath;
+    }
+
+    await UserModel.findByIdAndUpdate({ _id: id }, userData);
+    res.status(200).json({ msg: "Se actualizó el usuario correctamente" });
+  } catch (error) {
+    res.status(400).json({ msg: "Error al tratar de actualizar el usuario" });
+  }
+}
+
 module.exports = {
   getMe,
   getUsers,
   createUser,
+  updateUser,
 };
