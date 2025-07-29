@@ -54,8 +54,19 @@ async function updateCourses(req, res) {
   }
 }
 
+async function deleteCourse(req, res) {
+  try {
+    const { id } = req.params;
+
+    await CourseModel.findByIdAndDelete({ _id: id });
+    res.status(200).json({ msg: "El curso se ha eliminado correctamente!" });
+  } catch (error) {
+    res.status(400).json({ msg: "Error al tratar de eliminar el curso" });
+  }
+}
 module.exports = {
   createCourse,
   getCourses,
   updateCourses,
+  deleteCourse,
 };
