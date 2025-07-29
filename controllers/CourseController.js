@@ -37,7 +37,25 @@ async function getCourses(req, res) {
   }
 }
 
+async function updateCourses(req, res) {
+  try {
+    const { id } = req.params;
+    const coursesData = req.body;
+
+    if (req.files.miniature) {
+      const imagePath = image.getFilePath(req.files.miniature);
+      coursesData.miniature = imagePath;
+    }
+
+    await CourseModel.findByIdAndUpdate({ _id: id }, coursesData);
+    res.status(200).json({ msg: "Se ha actualizado correctamente el curso" });
+  } catch (error) {
+    res.status(400).json({ msg: "Error al actualizar el curso" });
+  }
+}
+
 module.exports = {
   createCourse,
   getCourses,
+  updateCourses,
 };
