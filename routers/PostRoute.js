@@ -7,5 +7,16 @@ const md_multiparty = multiparty({ uploadDir: "./uploads/blog" });
 const api = express.Router();
 
 //ENDPOINTS
+api.post(
+  "/post",
+  [md_auth.asureAuth, md_multiparty],
+  PostController.createPost
+);
+api.get("/posts", PostController.getPosts);
+api.patch(
+  "/post/:id",
+  [md_auth.asureAuth, md_multiparty],
+  PostController.updatePost
+);
 
 module.exports = api;

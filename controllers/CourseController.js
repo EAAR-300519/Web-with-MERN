@@ -25,9 +25,6 @@ async function getCourses(req, res) {
       limit: parseInt(limit),
     };
     const courses = await CourseModel.paginate({}, options);
-    console.log("========");
-    console.log(courses);
-    console.log("========");
 
     res.status(200).json(courses);
   } catch (error) {
