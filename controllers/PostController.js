@@ -49,7 +49,7 @@ async function updatePost(req, res) {
   }
 }
 
-async function deleteCourse(req, res) {
+async function deletePost(req, res) {
   try {
     const { id } = req.params;
 
@@ -60,9 +60,25 @@ async function deleteCourse(req, res) {
   }
 }
 
+async function getPostPath(req, res) {
+  try {
+    const { path } = req.params;
+
+    const postStored = await PostModel.findOne({ path });
+    if (!postStored) {
+      res.status(400).json({ msg: "No se ha encontrado ningún post" });
+    }
+
+    res.status(200).json(postStored);
+  } catch (error) {
+    res.status(400).json({ msg: "Error al tratar de obtener el post" });
+  }
+}
+
 module.exports = {
   createPost,
   getPosts,
   updatePost,
-  deleteCourse,
+  deletePost,
+  getPostPath,
 };
