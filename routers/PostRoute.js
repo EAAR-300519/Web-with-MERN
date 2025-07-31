@@ -18,5 +18,6 @@ api.patch(
   [md_auth.asureAuth, md_multiparty],
   PostController.updatePost
 );
+api.delete("/post/:id", [md_auth.asureAuth], PostController.deleteCourse);
 
 module.exports = api;

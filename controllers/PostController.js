@@ -49,8 +49,20 @@ async function updatePost(req, res) {
   }
 }
 
+async function deleteCourse(req, res) {
+  try {
+    const { id } = req.params;
+
+    await PostModel.findByIdAndDelete({ _id: id });
+    res.status(200).json({ msg: "El post se ha eliminado correctamente" });
+  } catch (error) {
+    res.status(500).json({ msg: "Error al tratar de eliminar el post" });
+  }
+}
+
 module.exports = {
   createPost,
   getPosts,
   updatePost,
+  deleteCourse,
 };
