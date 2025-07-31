@@ -10,7 +10,7 @@ async function createPost(req, res) {
     post.created_at = new Date();
     const postStored = await post.save();
 
-    res.status(200).json(postStored);
+    res.status(201).json(postStored);
   } catch (error) {
     res.status(400).json({ msg: "Error al tratar de crear el post" });
   }
